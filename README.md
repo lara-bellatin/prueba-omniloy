@@ -17,3 +17,4 @@
 - Run `node main.js` to get data on the current inventory, including waste rate and sold out time (if available), for each product and as a general metric. The default date is 09/30/2022, but you can set a different date by going into the `main.js` file and changing variable `date_str`
 - `create_current_inventory_view.sql` contains code to create a view of an updated inventory
 - Current inventory view available in Cube.js as well
+- Additional data structures/patterns analysis in `extra_structures.md`
