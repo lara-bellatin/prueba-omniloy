@@ -125,14 +125,18 @@ cube(`purchases`, {
     },
 
     total_stock: {
-      sql: `(case_quantity * packs_per_case * items_per_pack) - ${total_sold}`,
+      sql: `(case_quantity * packs_per_case * items_per_pack) - COALESCE(${total_sold}, 0)`,
       type: `sum`
     },
 
     waste_rate: {
-      sql: `((case_quantity * packs_per_case * items_per_pack) - COALESCE(${total_sold}*1.0, 0)) / (case_quantity * packs_per_case * items_per_pack)`,
-      type: `sum`
-    }
+      sql: `CAST(((case_quantity * packs_per_case * items_per_pack) - COALESCE(${total_sold}*1.0, 0)) / (case_quantity * packs_per_case * items_per_pack) as decimal(18, 2))`,
+      type: `avg`,
+    },
+
+    // last_sold: {
+      
+    // }
   },
 
   segments: {

@@ -26,7 +26,7 @@ async function getInventoryDataForDate(dateStr) {
         p.total_purchased,
         o.total_sold,
         (COALESCE(p.total_purchased, 0) - COALESCE(o.total_sold, 0)) as total_stock,
-        (total_purchased - COALESCE(total_sold*1.0, 0)) / total_purchased as waste_rate,
+        CAST((total_purchased - COALESCE(total_sold*1.0, 0)) / total_purchased as decimal(18, 2)) as waste_rate,
         CASE WHEN (COALESCE(p.total_purchased, 0) - COALESCE(o.total_sold, 0)) = 0 THEN o.last_sold ELSE NULL END as sold_out_time,
         o.last_sold
       FROM (
