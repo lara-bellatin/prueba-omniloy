@@ -100,6 +100,12 @@ cube(`purchases`, {
     vendor_name: {
       sql: `vendor_name`,
       type: `string`
+    },
+
+    total_sold: {
+      sql: `${orders.total_sold}`,
+      type: `number`,
+      sub_query: true
     }
   },
   
@@ -107,15 +113,31 @@ cube(`purchases`, {
     count: {
       type: `count`
     },
-    
-    case_quantity: {
-      sql: `case_quantity`,
-      type: `sum`
+
+    total_items: {
+      sql: `inventory_item_name`,
+      type: `count_distinct`
     },
 
     total_purchased: {
       sql: `case_quantity * packs_per_case * items_per_pack`,
       type: `sum`
+    },
+
+    total_stock: {
+      sql: `(case_quantity * packs_per_case * items_per_pack) - ${total_sold}`,
+      type: `sum`
+    },
+
+    waste_rate: {
+      sql: `((case_quantity * packs_per_case * items_per_pack) - COALESCE(${total_sold}*1.0, 0)) / (case_quantity * packs_per_case * items_per_pack)`,
+      type: `sum`
+    }
+  },
+
+  segments: {
+    food_items: {
+      sql: `inventory_item_name LIKE 'food-%`
     }
   }
 });

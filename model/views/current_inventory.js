@@ -6,7 +6,9 @@ view(`current_inventory`, {
       includes: [
         `inventory_item_name`,
         `purchase_item_name`,
-        `total_purchased`
+        `total_purchased`,
+        `total_stock`,
+        `waste_rate`
       ]
     },
     {
@@ -16,7 +18,8 @@ view(`current_inventory`, {
           name: `item_name`,
           alias: `order_item_name`
         },
-        `total_sold`
+        `total_sold`,
+        `last_sold`
       ]
     }
   ],

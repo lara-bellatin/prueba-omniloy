@@ -269,6 +269,11 @@ cube(`orders`, {
       sql: `quantity`,
       type: `sum`
     },
+
+    last_sold: {
+      sql: `created_at::TIME`,
+      type: `max`
+    }
   },
 
   segments: {
