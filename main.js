@@ -25,8 +25,8 @@ async function getInventoryDataForDate(dateStr) {
         p.purchase_item_name,
         p.total_purchased,
         o.total_sold,
-        (COALESCE(p.total_purchased, 0) - COALESCE(o.total_sold, 0)) as total_stock,
-        CAST((total_purchased - COALESCE(total_sold*1.0, 0)) / total_purchased as decimal(18, 2)) as waste_rate,
+        (COALESCE(p.total_purchased, 0) - COALESCE(o.total_sold, 0))::INT as total_stock,
+        CAST((total_purchased - COALESCE(total_sold*1.0, 0)) / total_purchased as decimal(18, 2))::FLOAT as waste_rate,
         CASE WHEN (COALESCE(p.total_purchased, 0) - COALESCE(o.total_sold, 0)) = 0 THEN o.last_sold ELSE NULL END as sold_out_time,
         o.last_sold
       FROM (
@@ -37,13 +37,13 @@ async function getInventoryDataForDate(dateStr) {
         FROM purchases
         WHERE
           inventory_item_name LIKE 'food-%' AND
-          delivery_date LIKE CONCAT('${date.format('DD/MM/YYYY')}', '%')
+          TO_DATE(delivery_date, 'DD/MM/YYYY') = '${date.format()}'::date
       ) p
       LEFT JOIN (
         SELECT item_id,
           item_name,
           LOWER(REPLACE(item_name, ' ', '')) as formatted_item_name,
-          SUM(quantity) as total_sold,
+          SUM(quantity)::INT as total_sold,
           MAX(created_at)::TIME as last_sold
         FROM orders
         WHERE
