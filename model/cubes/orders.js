@@ -219,11 +219,6 @@ cube(`orders`, {
       type: `string`
     },
     
-    created_at: {
-      sql: `created_at`,
-      type: `time`
-    },
-    
     local_created_at: {
       sql: `local_created_at`,
       type: `time`
@@ -257,6 +252,16 @@ cube(`orders`, {
     local_time_of_day_by_30min: {
       sql: `local_time_of_day_by_30min`,
       type: `time`
+    },
+
+    sold_at: {
+      sql: `created_at`,
+      type: `time`
+    },
+
+    name: {
+      sql: `LOWER(REPLACE(${orders.item_name}, ' ', ''))`,
+      type: `string`
     }
   },
   
@@ -278,7 +283,7 @@ cube(`orders`, {
 
   segments: {
     food_items: {
-      sql: `${CUBE}.is_food`
+      sql: `${CUBE}.is_food::bool`
     }
   }
 });

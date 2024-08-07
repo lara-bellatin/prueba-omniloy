@@ -106,6 +106,11 @@ cube(`purchases`, {
       sql: `${orders.total_sold}`,
       type: `number`,
       sub_query: true
+    },
+
+    purchased_at: {
+      sql: `TO_DATE(delivery_date, 'DD/MM/YYYY')`,
+      type: `time`
     }
   },
   
@@ -132,16 +137,6 @@ cube(`purchases`, {
     waste_rate: {
       sql: `CAST(((case_quantity * packs_per_case * items_per_pack) - COALESCE(${total_sold}*1.0, 0)) / (case_quantity * packs_per_case * items_per_pack) as decimal(18, 2))`,
       type: `avg`,
-    },
-
-    // last_sold: {
-      
-    // }
-  },
-
-  segments: {
-    food_items: {
-      sql: `inventory_item_name LIKE 'food-%`
     }
   }
 });
